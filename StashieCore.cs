@@ -320,7 +320,7 @@ namespace Stashie
 
             foreach (var invItem in inv.VisibleInventoryItems)
             {
-                WaitUntil(() => { return !Keyboard.IsKeyPressed(Keys.LShiftKey); }, 2000);
+                WaitUntil(() => { return !Keyboard.IsKeyPressed(Settings.BlindDumpHotkey); }, 2000);
                 if (!IsValidState())
                 {
                     return;
@@ -336,6 +336,14 @@ namespace Stashie
 
                 if (CheckIgnoreCells(invItem))
                     continue;
+
+                if (Settings.IgnoreCurrencyVendorWindow)
+                {
+                    if (RefillCurrencyNames.Any(x => x == GameController.Files.BaseItemTypes.Translate(invItem.Item.Path).BaseName))
+                    {
+                        continue;
+                    }
+                }
 
                 Keyboard.KeyDown(Keys.LControlKey);
                 try
@@ -478,14 +486,15 @@ namespace Stashie
                         {
                             // skip
                         }
-                        else if(Keyboard.IsKeyToggled(Settings.DropHotkey.Value) && Keyboard.IsKeyPressed(Keys.LShiftKey))
+                        else if(Keyboard.IsKeyToggled(Settings.DropHotkey.Value) && Keyboard.IsKeyPressed(Settings.BlindDumpHotkey))
                         {
-                            if (Keyboard.IsKeyPressed(Keys.LShiftKey))
+                            Func<bool> VendorWindow = () => GameController.Game.IngameState.UIRoot.Children?[1].Children?[74]?.IsVisible ?? false;
+                            if (Keyboard.IsKeyPressed(Settings.BlindDumpHotkey))
                             {
-                                LogWarning($"{Keys.LShiftKey} key is toggled, disabling it.", 5);
-                                Keyboard.KeyPress(Keys.LShiftKey);
+                                LogWarning($"{Settings.BlindDumpHotkey} key is toggled, disabling it.", 5);
+                                Keyboard.KeyPress(Settings.BlindDumpHotkey);
                             }
-                            if ((GameController.Game.IngameState.UIRoot.Children?[1].Children?[74]?.IsVisible ?? false) || stashOpen())
+                            if ((VendorWindow()) || stashOpen())
                             {
                                 DumpToOpenWindow(_ingameState.IngameUi.InventoryPanel[InventoryIndex.PlayerInventory],
                                     () => { return inventoryOpen() || stashOpen(); });

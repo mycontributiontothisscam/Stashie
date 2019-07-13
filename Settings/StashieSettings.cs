@@ -16,6 +16,13 @@ namespace Stashie.Settings
 
         [Menu("Hotkey", 1001, 1000)] public HotkeyNode DropHotkey { get; set; } = Keys.F3;
 
+
+        [Menu("Additional Blind Dump Hotkey", "Stashie will blindly dump inventory items to any open window/stash tab/etc... upon release of both hotkeys.", 1002, 500)]
+        public HotkeyNode BlindDumpHotkey { get; set; } = Keys.LControlKey;
+        [Menu("Ignore currency", "Ignore currency during vendor window dumps.", 1003, 1002)]
+        public ToggleNode IgnoreCurrencyVendorWindow { get; set; } = true;
+
+
         [Menu("Extra Delay", "Is it going too fast? Then add a delay (in ms).", 2000, 500)]
         public RangeNode<int> ExtraDelay { get; set; } = new RangeNode<int>(30, 0, 1000);
 
