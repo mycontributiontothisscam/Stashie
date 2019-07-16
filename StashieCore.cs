@@ -339,7 +339,7 @@ namespace Stashie
 
                 if (Settings.IgnoreCurrencyVendorWindow)
                 {
-                    if (RefillCurrencyNames.Any(x => x == GameController.Files.BaseItemTypes.Translate(invItem.Item.Path).BaseName))
+                    if (GameController.Files.BaseItemTypes.Translate(invItem.Item.Path).ClassName == "StackableCurrency")
                     {
                         continue;
                     }
