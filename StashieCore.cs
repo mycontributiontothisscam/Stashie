@@ -339,7 +339,9 @@ namespace Stashie
 
                 if (Settings.IgnoreCurrencyVendorWindow)
                 {
-                    if (GameController.Files.BaseItemTypes.Translate(invItem.Item.Path).ClassName == "StackableCurrency")
+                    // Workaround as some fossils have classnames with "StackableCurrency" even though they're not stackable in game (yet?)
+                    if (GameController.Files.BaseItemTypes.Translate(invItem.Item.Path).ClassName == "StackableCurrency"
+                        && !GameController.Files.BaseItemTypes.Translate(invItem.Item.Path).BaseName.Contains("Fossil"))
                     {
                         continue;
                     }
